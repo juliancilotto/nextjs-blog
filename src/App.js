@@ -1,25 +1,20 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { useState, useEffect } from "react";
+import Loading from "./components/loading";
+import axios from "axios";
+import TodoList from "./components/todo-list";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const [todos, setTodos] = useState(null);
+
+  useEffect(() => {
+    axios.get("https://jsonplaceholder.typicode.com/todos").then((result) => {
+      setTodos(result.data);
+      // console.table(result.data); //this duplicate de data, showing on the console to teh developer
+    });
+  }, []);
+
+  return <div>{todos ? <TodoList todos={todos} /> : <Loading />}</div>;
 }
 
 export default App;
